@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="generator" content="Madoko, version 1.1.6" />
+  <meta name="viewport" content="initial-scale=1.0" />
+  <meta name="copyright" content="Copyright 2013, Daan Leijen, Microsoft Corporation." />
+  <meta name="license" content="This is free software; you can redistribute it and/or modify it under the
+                terms of the Apache License, Version 2.0. A copy of the License can be
+                found in the file &quot;license.txt&quot; at the root of this distribution." />
+  <meta name="author" content="Douglas Comer, Adib Rastegarnia" />
+  <title>gNI: Generalized Network Interfaces</title>
+  <style type="text/css"  class="link">
+  /*# sourceURL=madoko.css */
+  
+  .madoko .toc>.tocblock .tocblock .tocblock {
+    margin-left: 2.25em;
+  }
+  .madoko .toc>.tocblock .tocblock {
+    margin-left: 1.5em;
+  }
+  .madoko .toc-contents>.tocblock>.tocitem {
+    font-weight: bold;
+  }
+  .madoko .toc {
+    margin-top: 1em;
+  }
+  .madoko p.para-continue {
+    margin-bottom: 0pt;
+  }
+  .madoko .para-block+p {
+    margin-top: 0pt;
+  }
+  .madoko ul.para-block, .madoko ol.para-block {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+  }
+  .madoko ul.para-end, .madoko ol.para-end {
+    margin-bottom: 1em;
+  }
+  .madoko dl {
+    margin-left: 0em;
+  }
+  .madoko blockquote {
+    font-style: italic;
+  }
+  .madoko a.localref {
+    text-decoration: none;
+  }
+  .madoko a.localref:hover {
+    text-decoration: underline;
+  }
+  .madoko .footnotes {
+    font-size: smaller;
+    margin-top: 2em;
+  }
+  .madoko .footnotes hr {
+    width: 50%;
+    text-align: left;
+  }
+  .madoko .footnote { 
+    margin-left: 1em;
+  }
+  .madoko .footnote-before {
+    margin-left: -1em;
+    width: 1em;
+    display: inline-block;
+  }
+  .madoko .align-center, .madoko .align-center>p {
+    text-align: center !important;
+  }
+  .madoko .align-center pre {
+    text-align: left;
+  }
+  .madoko .align-center>* {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-left, .madoko .align-left>p {
+    text-align: left !important;
+  }
+  .madoko .align-left>* {
+    margin-left: 0pt !important;
+    margin-right: auto !important;
+  }
+  .madoko .align-right, .madoko .align-right>p {
+    text-align: right !important;
+  }
+  .madoko .align-right>* {
+    margin-left: auto !important;
+    margin-right: 0pt !important;
+  }
+  .madoko .align-center>table,
+  .madoko .align-left>table,
+  .madoko .align-right>table {
+    text-align: left !important;
+  }
+  .madoko .equation-before {
+    float: right;
+  }
+  .madoko .bibitem {
+    font-size: smaller;
+  }
+  .madoko .bibsearch {
+    font-size: x-small;
+    text-decoration:none;
+    color: black;
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  .madoko .block, .madoko .figure, .madoko .bibitem, .madoko .equation, .madoko div.math {
+    margin-top: 1ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .figure {
+    padding: 0.5em;
+    margin-left: 0pt;
+    margin-right: 0pt;
+  }
+  .madoko .hidden {
+    display: none;
+  }
+  .madoko .invisible {
+    visibility: hidden;
+  }
+  .madoko.preview .invisible {
+    visibility: visible;
+    opacity: 0.5;
+  }
+  .madoko code.code, .madoko span.code {
+    white-space: pre-wrap;
+  }
+  .madoko hr, hr.madoko {
+    border: none;
+    border-bottom: black solid 1px;
+    margin-bottom: 0.5ex;
+  }
+  .madoko .framed>*:first-child {
+    margin-top: 0pt;
+  }
+  .madoko .framed>*:last-child {
+    margin-bottom: 0pt;
+  }
+  .madoko ul.list-style-type-dash {
+      list-style-type: none !important;
+  }
+  .madoko ul.list-style-type-dash > li:before {
+      content: "\2013"; 
+      position: absolute;
+      margin-left: -1em; 
+  }
+  .madoko table.madoko {
+    border-collapse: collapse;
+  }
+  .madoko td, .madoko th {
+    padding: 0ex 0.5ex;
+    margin: 0pt;
+    vertical-align: top;
+  }
+  .madoko .cell-border-left {
+    border-left: 1px solid black;
+  }
+  .madoko .cell-border-right {
+    border-right: 1px solid black;
+  }
+  .madoko thead>tr:first-child>.cell-line,
+  .madoko tbody:first-child>tr:first-child>.cell-line {
+    border-top: 1px solid black;
+    border-bottom: none;
+  }
+  .madoko .cell-line, .madoko .cell-double-line {
+    border-bottom: 1px solid black;
+    border-top: none;
+  }
+  .madoko .cell-double-line {
+    border-top: 1px solid black;
+    padding-top: 1.5px !important;
+  }
+  .madoko .input-mathpre .MathJax_Display {
+    text-align: left !important;
+  }
+  .madoko div.input-mathpre {
+    text-align: left;
+    margin-top: 1.5ex;
+    margin-bottom: 1ex;
+  }
+  .madoko .math-rendering {
+    text-align: left;
+    white-space: pre;
+    color: gray;
+  }
+  .madoko .mathdisplay {
+    text-align: center;
+  }
+  .madoko .pretty table {
+    border-collapse: collapse;
+  }
+  .madoko .pretty td {
+    padding: 0em;
+  }
+  .madoko .pretty td.empty {
+    min-width: 1.5ex;
+  }
+  .madoko .pretty td.expander {
+    width: 100em;
+  }
+  body.madoko, .madoko .serif {
+    font-family: Cambria,"Times New Roman","Liberation Serif","Times",serif;
+  }
+  .madoko .sans-serif {
+    font-family: "Calibri", "Optima", sans-serif;
+  }
+  .madoko .symbol {
+    font-family: "Segoe UI Symbol", Symbola, serif;
+  }
+  body.madoko {  
+    -webkit-text-size-adjust: 100%;       
+    text-rendering: optimizeLegibility;
+  }
+  body.madoko {
+    max-width: 88ex; 
+    margin: 1em auto;
+    padding: 0em 2em;  
+  }
+  body.preview.madoko {
+    padding: 0em 1em;
+  }
+  .madoko p {
+    text-align: justify;
+  }
+  .madoko h1, .madoko h2, .madoko h3, .madoko h4 { 
+    margin-top: 1.22em; 
+    margin-bottom: 1ex;
+  }
+  .madoko h1+p, .madoko h2+p, .madoko h3+p, .madoko h4+p, .madoko h5+p  { 
+    margin-top: 1ex;    
+  }
+  .madoko h5, .madoko h6 { 
+    margin-top: 1ex;
+    font-size: 1em;
+  }
+  .madoko h5 { 
+    margin-bottom: 0.5ex;
+  }
+  .madoko h5 + p {
+    margin-top: 0.5ex;
+  }
+  .madoko h6 { 
+    margin-bottom: 0pt;
+  }
+  .madoko h6 + p {
+    margin-top: 0pt;
+  }
+  .madoko pre, .madoko code, .madoko kbd, .madoko samp, .madoko tt, 
+  .madoko .monospace, .madoko .token-indent, .madoko .reveal pre, .madoko .reveal code, .madoko .email {
+    font-family: Consolas,"Andale Mono WT","Andale Mono",Lucida Console,Monaco,monospace,monospace;
+    font-size: 0.85em;
+  }
+  .madoko pre code, .madoko .token-indent {
+    font-size: 0.95em;
+  }
+  .madoko pre code {
+    font-family: inherit !important;
+  }
+  .madoko ol.linenums li {
+    background-color: white;
+    list-style-type: decimal;
+  }
+  .madoko .remote {
+    background-color: #F0FFF0;
+  }
+  .madoko .remote + * {
+    margin-top: 0pt;
+  }
+  @media print {
+    body.madoko {
+      font-size: 10pt;
+    }
+    @page {
+      margin: 1in 1.5in;
+    }
+  }
+  @media only screen and (max-device-width:1024px) {
+    body.madoko {
+      padding: 0em 0.5em;    
+    }
+    .madoko li {
+      text-align: left;
+    }
+  }
+  
+    </style>
+  <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"  class="script"></script>
+  
+  </head>
+<body class="madoko">
+
+<div class="body madoko" style="font-family:sans-serif, serif;line-adjust:0">
+
+<div class="titleblock align-center para-block" style="text-align:center;line-adjust:0">
+<div class="titleheader align-center" style="text-align:center;line-adjust:0">
+<div class="title para-block" style="font-size:xx-large;margin-bottom:0.5ex;font-family:sans-serif;font-weight:bold;line-adjust:0">gNI: Generalized Network Interfaces</div>
+<div class="subtitle para-block" style="font-size:x-large;margin-bottom:0.5ex;line-adjust:0">API Specification (WIP)</div>
+<div class="titlenote para-block" style="font-family:sans-serif;font-weight:bold;line-adjust:0">2019-04-23 (version Beta;)</div></div>
+<div class="authors align-center" style="text-align:center;width:80%;font-family:sans-serif;font-weight:bold;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
+<tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
+<div class="authorname" style="font-size:large;line-adjust:0">Douglas Comer, Adib Rastegarnia</div>
+<div class="authoraddress" style="line-adjust:0">Purdue University</div>
+<div class="authoremail email" style="line-adjust:0">comer@cs.purdue.edu, arastega@purdue.edu</div></td></tr></tbody></table></div></div>
+<div class="abstract" style="margin-left:3em;margin-right:3em;font-size:small">
+<p class="p noindent"><strong class="strong-star2">Abstract.</strong> </p></div><h2 id="toc-header" class="clearnum h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold">Table of contents</h2><span data-line=""></span>
+<nav class="toc toc-contents"><h2 id="sec-contents" class="clearnum h1 heading-contents" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold">Contents</h2>
+<div class="tocblock tocblock1">
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-introduction" data-toc-depth="1" data-toc-line="[1]{.heading-label}.&#8194;Introduction" style="toctarget:sec-introduction"><a href="#sec-introduction" class="localref"><span class="heading-label">1</span>.&#8194;Introduction</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-terms-definitions-and-symbols" data-toc-depth="1" data-toc-line="[2]{.heading-label}.&#8194;Terms, definitions, and symbols" style="toctarget:sec-terms-definitions-and-symbols"><a href="#sec-terms-definitions-and-symbols" class="localref"><span class="heading-label">2</span>.&#8194;Terms, definitions, and symbols</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-classification-of-gnmi-and-p4runtime-services" data-toc-depth="1" data-toc-line="[3]{.heading-label}.&#8194;Classification of gNMI and P4Runtime Services" style="toctarget:sec-classification-of-gnmi-and-p4runtime-services"><a href="#sec-classification-of-gnmi-and-p4runtime-services" class="localref"><span class="heading-label">3</span>.&#8194;Classification of gNMI and P4Runtime Services</a></div>
+<div class="tocblock tocblock2">
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-fetch-request-paradigm-" data-toc-depth="2" data-toc-line="[3.1]{.heading-label}.&#8194;Fetch Request Paradigm:" style="toctarget:sec-fetch-request-paradigm-"><a href="#sec-fetch-request-paradigm-" class="localref"><span class="heading-label">3.1</span>.&#8194;Fetch Request Paradigm:</a></div>
+<div class="tocblock tocblock3">
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-gnmi-" data-toc-depth="3" data-toc-line="[3.1.1]{.heading-label}.&#8194;gNMI:" style="toctarget:sec-gnmi-"><a href="#sec-gnmi-" class="localref"><span class="heading-label">3.1.1</span>.&#8194;gNMI:</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-p4runtime-" data-toc-depth="3" data-toc-line="[3.1.2]{.heading-label}.&#8194;P4Runtime:" style="toctarget:sec-p4runtime-"><a href="#sec-p4runtime-" class="localref"><span class="heading-label">3.1.2</span>.&#8194;P4Runtime:</a></div></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-store-request-paradigm" data-toc-depth="2" data-toc-line="[3.2]{.heading-label}.&#8194;Store Request Paradigm" style="toctarget:sec-store-request-paradigm"><a href="#sec-store-request-paradigm" class="localref"><span class="heading-label">3.2</span>.&#8194;Store Request Paradigm</a></div>
+<div class="tocblock tocblock3">
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-gnmi-" data-toc-depth="3" data-toc-line="[3.2.1]{.heading-label}.&#8194;gNMI:" style="toctarget:sec-gnmi-"><a href="#sec-gnmi-" class="localref"><span class="heading-label">3.2.1</span>.&#8194;gNMI:</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-p4runtime-" data-toc-depth="3" data-toc-line="[3.2.2]{.heading-label}.&#8194;P4Runtime:" style="toctarget:sec-p4runtime-"><a href="#sec-p4runtime-" class="localref"><span class="heading-label">3.2.2</span>.&#8194;P4Runtime:</a></div></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-streaming" data-toc-depth="2" data-toc-line="[3.3]{.heading-label}.&#8194;Streaming" style="toctarget:sec-streaming"><a href="#sec-streaming" class="localref"><span class="heading-label">3.3</span>.&#8194;Streaming</a></div>
+<div class="tocblock tocblock3">
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-gnmi-" data-toc-depth="3" data-toc-line="[3.3.1]{.heading-label}.&#8194;gNMI:" style="toctarget:sec-gnmi-"><a href="#sec-gnmi-" class="localref"><span class="heading-label">3.3.1</span>.&#8194;gNMI:</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-p4runtime-" data-toc-depth="3" data-toc-line="[3.3.2]{.heading-label}.&#8194;P4Runtime:" style="toctarget:sec-p4runtime-"><a href="#sec-p4runtime-" class="localref"><span class="heading-label">3.3.2</span>.&#8194;P4Runtime:</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-gnoi-" data-toc-depth="3" data-toc-line="[3.3.3]{.heading-label}.&#8194;gNOI:" style="toctarget:sec-gnoi-"><a href="#sec-gnoi-" class="localref"><span class="heading-label">3.3.3</span>.&#8194;gNOI:</a></div></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-network-management-operations-" data-toc-depth="2" data-toc-line="[3.4]{.heading-label}.&#8194;Network Management Operations:" style="toctarget:sec-network-management-operations-"><a href="#sec-network-management-operations-" class="localref"><span class="heading-label">3.4</span>.&#8194;Network Management Operations:</a></div>
+<div class="tocblock tocblock3">
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec-gnoi-" data-toc-depth="3" data-toc-line="[3.4.1]{.heading-label}.&#8194;gNOI:" style="toctarget:sec-gnoi-"><a href="#sec-gnoi-" class="localref"><span class="heading-label">3.4.1</span>.&#8194;gNOI:</a></div></div></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-an-overview-of-the-gni-specification" data-toc-depth="1" data-toc-line="[4]{.heading-label}.&#8194;An Overview of the gNI Specification" style="toctarget:sec-an-overview-of-the-gni-specification"><a href="#sec-an-overview-of-the-gni-specification" class="localref"><span class="heading-label">4</span>.&#8194;An Overview of the gNI Specification</a></div>
+<div class="tocblock tocblock2">
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-data-fetch-interaction-" data-toc-depth="2" data-toc-line="[4.1]{.heading-label}.&#8194;Data Fetch Interaction:" style="toctarget:sec-data-fetch-interaction-"><a href="#sec-data-fetch-interaction-" class="localref"><span class="heading-label">4.1</span>.&#8194;Data Fetch Interaction:</a></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-data-store-interaction-" data-toc-depth="2" data-toc-line="[4.2]{.heading-label}.&#8194;Data Store Interaction:" style="toctarget:sec-data-store-interaction-"><a href="#sec-data-store-interaction-" class="localref"><span class="heading-label">4.2</span>.&#8194;Data Store Interaction:</a></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-streaming-interaction-" data-toc-depth="2" data-toc-line="[4.3]{.heading-label}.&#8194;Streaming Interaction:" style="toctarget:sec-streaming-interaction-"><a href="#sec-streaming-interaction-" class="localref"><span class="heading-label">4.3</span>.&#8194;Streaming Interaction:</a></div>
+<div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-command-interaction-" data-toc-depth="2" data-toc-line="[4.4]{.heading-label}.&#8194;Command Interaction:" style="toctarget:sec-command-interaction-"><a href="#sec-command-interaction-" class="localref"><span class="heading-label">4.4</span>.&#8194;Command Interaction:</a></div></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-an-overview-of-the-proposed-architecture" data-toc-depth="1" data-toc-line="[5]{.heading-label}.&#8194;An Overview of the Proposed Architecture" style="toctarget:sec-an-overview-of-the-proposed-architecture"><a href="#sec-an-overview-of-the-proposed-architecture" class="localref"><span class="heading-label">5</span>.&#8194;An Overview of the Proposed Architecture</a></div>
+<div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-references" data-toc-depth="1" data-toc-line="References" style="toctarget:sec-references"><a href="#sec-references" class="localref">References</a></div></div></nav><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2>
+<p class="p noindent">P4Runtime<span class="citations" style="target-element:bibitem">[<a href="#p4runtimerepo" title="p4lang/p4Runtime repository:P4Runtime Protobuf definition files and specification
+n.d., " class="bibref localref" style="target-element:bibitem"><span class="cite-number">2</span></a>]</span>, gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
+Management applications use gNMI for configuration of network devices, P4Runtime to implement control plane applications and services, and gNOI for executing 
+operational commands on network devices.. Although details differ, P4Runtime, gNMI, and gNOI employ the same 
+conceptual abstractions and messaging paradigms when communicating with network devices. 
+ The similarity makes it possible to define a single, unified API that supports all configuration,
+ management, and control plane services that gNMI, P4Runtime, and gNOI provide.
+ The essence of the work consists of a set of generalized network configuration and 
+ control interfaces called Generalized Network Interfaces (gNI) that started with the
+  following design goals:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li">Provide a set of unified Northbound (NB) interfaces that can be used to configure, manage,
+ and control network devices and services.
+</li>
+<li class="li ul-li list-dash-li compact-li">Minimize the number of remote procedure call functions that a network administrator 
+need to know for configuring, managing, and controlling of network devices.
+</li></ul>
+<h2 id="sec-terms-definitions-and-symbols" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">2</span>.&#8194;</span>Terms, definitions, and symbols</h2>
+<ul class="ul list-star compact">
+<li class="li ul-li list-star-li compact-li">gNMI: gNMI is a gRPC network management interface that is  developed by Google. gNMI provides
+the abstractions that we can use to install, manipulate, and remove the 
+configuration of network devices, and also to view operational data.
+</li>
+<li class="li ul-li list-star-li compact-li">gNOI: gNOI is a gRPC network operation interface that provides the abstractions that we can use to execute 
+ operational commands on network devices.
+</li>
+<li class="li ul-li list-star-li compact-li">gRPC: gRPC is a modern, open source remote procedure call (RPC) framework that can run anywhere. 
+It enables client and server applications&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#grpc" title="gRPC main site
+n.d., " class="bibref localref" style="target-element:bibitem"><span class="cite-number">1</span></a>]</span>. 
+to communicate transparently, and makes it easier to build connected systems.
+</li>
+<li class="li ul-li list-star-li compact-li">P4Runtime: P4 Runtime is a silicon-independent and protocol-independent API that can be autogenerated
+from an unambiguous definition of a packet processing pipeline in P4&nbsp;<span class="citations" style="target-element:bibitem">[<a href="#p4runtimerepo" title="p4lang/p4Runtime repository:P4Runtime Protobuf definition files and specification
+n.d., " class="bibref localref" style="target-element:bibitem"><span class="cite-number">2</span></a>]</span>. 
+</li>
+<li class="li ul-li list-star-li compact-li">
+<p>Protobuf: Protocol Buffers (Protobuf) are language- and platform-neutral mechanisms for
+ serializing structured data. 
+</p></li></ul>
+<h2 id="sec-classification-of-gnmi-and-p4runtime-services" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3</span>.&#8194;</span>Classification of gNMI and P4Runtime Services</h2>
+<p class="p noindent">Services provides by gNMI, P4Runtime, and gNOI fall into four major categories:
+</p><h3 id="sec-fetch-request-paradigm-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.1</span>.&#8194;</span>Fetch Request Paradigm:</h3>
+<p class="p noindent">In this paradigm a client uses a fetch request 
+to obtain information from a target. For example, we use this paradigm in 
+gNMI and P4Runtime to retrieve a snapshot of data and read one or 
+more P4 entities from the target respectively. We list gNMI and P4Runtime
+ functions that follow this paradigm as follows:
+</p><h4 id="sec-gnmi-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.1.1</span>.&#8194;</span>gNMI:</h4>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Capabilities(CapabilityRequest) returns (CapabilityResponse)</strong>: 
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Capabilities</em> function allows the client to retrieve the set of capabilities that is supported by the target.
+</li></ul></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Get(GetRequest) returns (GetResponse)</strong>:
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Get</em> function allows to retrieve a snapshot of data from the target.
+</li></ul></li></ul>
+<h4 id="sec-p4runtime-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.1.2</span>.&#8194;</span>P4Runtime:</h4>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc GetForwardingPipelineConfig(GetForwardingPipelineConfigRequest) returns (GetForwardingPipelineConfigResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">GetForwardingPipelineConfig</em> allows to get the current P4 forwarding-pipeline config.
+</li></ul></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Read(ReadRequest) returns (stream ReadResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Read</em> allows to read one or more P4 entities from the target.
+</li></ul></li></ul>
+<h3 id="sec-store-request-paradigm" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.2</span>.&#8194;</span>Store Request Paradigm</h3>
+<p class="p noindent">In this paradigm, a client uses a store request to update one 
+or more P4 entities or modify the state of data on the target. We list gNMI and P4Runtime
+ functions that follow store request paradigm as follows:
+</p><h4 id="sec-gnmi-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.2.1</span>.&#8194;</span>gNMI:</h4>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Set(SetRequest) returns (SetResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Set</em> function allows the client to modify the state of data on the target.
+</li></ul>
+<h4 id="sec-p4runtime-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.2.2</span>.&#8194;</span>P4Runtime:</h4></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc SetForwardingPipelineConfig(SetForwardingPipelineConfigRequest) returns (SetForwardingPipelineConfigResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">SetForwardingPipelineConfig</em> allows to Set the P4 forwarding-pipeline config.
+</li></ul></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Write(WriteRequest) returns (WriteResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Write</em>  function allows to update one or more P4 entities on the target.
+</li></ul></li></ul>
+<h3 id="sec-streaming" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.3</span>.&#8194;</span>Streaming</h3>
+<p class="p noindent">In this paradigm, a client subscribe to receive a stream of events 
+from the target such as the stream of events between the controller 
+and a switch or values of particular paths within the data tree. We list gNMI, P4Runtime, and gNOI 
+ functions that follow streaming paradigm as follows:
+</p><h4 id="sec-gnmi-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.3.1</span>.&#8194;</span>gNMI:</h4>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Subscribe(stream SubscribeRequest) returns (stream SubscribeResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Subscribe</em> allows a client to request the target to send 
+ it values of particular paths within the data tree.
+</li></ul></li></ul>
+<h4 id="sec-p4runtime-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.3.2</span>.&#8194;</span>P4Runtime:</h4>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc StreamChannel(stream StreamMessageRequest) returns (stream StreamMessageResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">StreamChannel</em> allows the bidirectional stream between the controller and the  switch.
+</li></ul></li></ul>
+<h4 id="sec-gnoi-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.3.3</span>.&#8194;</span>gNOI:</h4>
+<p class="p noindent">We list some of the gNOI functions that have been designed based on grpc service side, client side, bidrectional streaming as follows: 
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Ping(PingRequest) returns (stream PingResponse)</strong>:
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Ping</em> function executes the ping command on the target and streams back the results. This function 
+is an example of grpc server side streaming. 
+</li></ul></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc SetPackage(stream SetPackageRequest) returns (SetPackageResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">SetPackage</em> places a software package (possibly including bootable images) on the target. 
+This function is an example of grpc client side streaming. 
+</li></ul></li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2"> rpc Rotate(stream RotateCertificateRequest) returns (stream RotateCertificateResponse)</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Rotate</em> function replace an existing Certificate on the target. This is an 
+example of bidirectional streaming. 
+</li></ul></li></ul>
+<h3 id="sec-network-management-operations-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.4</span>.&#8194;</span>Network Management Operations:</h3><h4 id="sec-gnoi-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">3.4.1</span>.&#8194;</span>gNOI:</h4><h2 id="sec-an-overview-of-the-gni-specification" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4</span>.&#8194;</span>An Overview of the gNI Specification</h2>
+<p class="p noindent">The <em class="em-star1">gNI</em> service provides four categories of functions based on the categories that we explained them above.<br>
+We define each category of gNI rpc functions as follows: 
+</p><h3 id="sec-data-fetch-interaction-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.1</span>.&#8194;</span>Data Fetch Interaction:</h3>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Fetch(FetchRequest) returns (FetchResponse)</strong>: 
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Fetch</em> function allows to read one 
+or more P4 entities or retrieve a snapshot of data from the target using gNMI.
+</li></ul></li></ul>
+<h3 id="sec-data-store-interaction-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2</span>.&#8194;</span>Data Store Interaction:</h3>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Store(StoreRequest) returns (StoreResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li">This functions allows us to update one or more
+P4 entities or modify the state of data on the target using gNMI.
+</li></ul></li></ul>
+<h3 id="sec-streaming-interaction-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.3</span>.&#8194;</span>Streaming Interaction:</h3>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Stream (stream StreamRequest) returns (stream StreamResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li">This  function can be used to support the following functionalities: 
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li">Stream network events using a bidirectional streaming channel between the controller and the switch. 
+</li>
+<li class="li ul-li list-dash-li compact-li">Request the target to send it values of particular paths within the data tree. 
+</li>
+<li class="li ul-li list-dash-li compact-li">Implement gNOI network operations where a client needs to send a stream of the requests to the server and waits to receive a response from a device. 
+</li>
+<li class="li ul-li list-dash-li compact-li">Implement gNOI network operations where a client needs to send a request to the server and waits to receive a stream of responses from a device. 
+</li></ul></li></ul></li></ul>
+<h3 id="sec-command-interaction-" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.4</span>.&#8194;</span>Command Interaction:</h3>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">rpc Command (CommandRequest) returns (CommandResponse):</strong>
+
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><em class="em-star1">Command</em> function to implement gNOI network operations 
+that a client needs to send a request to the server and waits to receive a response from a device. 
+</li></ul></li></ul>
+<h2 id="sec-an-overview-of-the-proposed-architecture" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">5</span>.&#8194;</span>An Overview of the Proposed Architecture</h2>
+<p class="p noindent">As Figure&nbsp;<a href="#gni" title="The gNI Architecutre." class="localref" style="target-element:figure"><span class="figure-label">1</span></a> illustrates, the gNI gateway sits between 
+clients and gNMI, P4Runtime, and gNOI servers. The gNI gateway is responsible to translate gNI functions to appropriate gNMI, P4Runtime, and gNOI functions based on the given request. In other words, gNI gateway acts as a server for the clients and acts as a client for gNMI, P4Runtime, and gNOI servers. 
+</p>
+<figure id="gni" class="figure floating align-center float" style="text-align:center;float-env:figure;float-name:Figure">
+<p class="p noindent"><img src="data:image/png;base64,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" title="gNI" alt="gNI" data-path="images/gNI.png" data-linkid="gni" style="width:auto;max-width:90%;page-align:here">
+</p>
+<hr  class="figureline madoko" style="display:block">
+
+<div class="p noindent"><fig-caption class="figure-caption"><span class="caption-before"><strong class="strong-star2">Figure&#160;<span class="figure-label">1</span>.</strong>&#160;</span><span class="caption-text">The gNI Architecutre.</span></fig-caption></div></figure>
+<div class="bibl" style="bbl-file:out/docs-bib.bbl.mdk"><h2 id="sec-references" class="clearnum h1 heading-references" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold">References</h2>
+<div class="bibliography bib-numeric" data-hanging-indent="0" data-cite-style="numeric:&#39;[&#39;,&#39;]&#39;,&#39;, &#39;" data-style="madoko-numeric" style="bibstyle:madoko-numeric">
+<div id="grpc" class="bibitem" data-cite-authors="n.d." data-cite-authors-long="n.d." data-cite-label="1" data-line="references.bib:7" style="text-indent:-2rem;margin-left:2rem;searchterm:gRPC%20main%20site%20n.d.%2C%20;spellcheck:false;bibitem-label:\5C [1\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[1]</span>&#8220;gRPC Main Site.&#8221; <a href="https://grpc.io" class="bib-url texturl monospace">https://&#8203;grpc.&#8203;io</a>.&nbsp;<a href="http://www.bing.com/search?q=gRPC%20main%20site%20n.d.%2C%20" class="bibsearch">&#128270;</a></div>
+<div id="p4runtimerepo" class="bibitem" data-cite-authors="n.d." data-cite-authors-long="n.d." data-cite-label="2" data-line="references.bib:1" style="text-indent:-2rem;margin-left:2rem;searchterm:p4lang%2Fp4Runtime%20repository%3AP4Runtime%20Protobuf%20definition%20files%20and%20specification%20n.d.%2C%20;spellcheck:false;bibitem-label:\5C [2\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[2]</span>&#8220;p4lang/p4Runtime repository:P4Runtime Protobuf Definition Files and Specification.&#8221; <a href="https://github.com/p4lang/p4runtime" class="bib-url texturl monospace">https://&#8203;github.&#8203;com/&#8203;p4lang/&#8203;p4runtime</a>.&nbsp;<a href="http://www.bing.com/search?q=p4lang%2Fp4Runtime%20repository%3AP4Runtime%20Protobuf%20definition%20files%20and%20specification%20n.d.%2C%20" class="bibsearch">&#128270;</a></div>
+<div id="p4.org" class="bibitem" data-cite-authors="n.d." data-cite-authors-long="n.d." data-cite-label="3" data-line="references.bib:17" style="text-indent:-2rem;margin-left:2rem;searchterm:P4.org%20main%20site%20n.d.%2C%20;spellcheck:false;bibitem-label:\5C [3\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[3]</span>&#8220;P4.org Main Site.&#8221; <a href="https://p4.org/" class="bib-url texturl monospace">https://&#8203;p4.&#8203;org/&#8203;</a>.&nbsp;<a href="http://www.bing.com/search?q=P4.org%20main%20site%20n.d.%2C%20" class="bibsearch">&#128270;</a></div>
+<div id="proto" class="bibitem" data-cite-authors="n.d." data-cite-authors-long="n.d." data-cite-label="4" data-line="references.bib:12" style="text-indent:-2rem;margin-left:2rem;searchterm:Protocol%20buffers%20main%20site%20n.d.%2C%20;spellcheck:false;bibitem-label:\5C [4\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[4]</span>&#8220;Protocol Buffers Main Site.&#8221; <a href="https://developers.google.com/protocol-buffers" class="bib-url texturl monospace">https://&#8203;developers.&#8203;google.&#8203;com/&#8203;protocol-&#8203;buffers</a>.&nbsp;<a href="http://www.bing.com/search?q=Protocol%20buffers%20main%20site%20n.d.%2C%20" class="bibsearch">&#128270;</a></div>
+<div id="openconfig" class="bibitem" data-cite-authors="n.d." data-cite-authors-long="n.d." data-cite-label="5" data-line="references.bib:22" style="text-indent:-2rem;margin-left:2rem;searchterm:the%20OpenConfig%20project%20n.d.%2C%20;spellcheck:false;bibitem-label:\5C [5\5C ]"><span class="bibitem-before" style="padding-right:0.5em;display: inline-block; width:calc(2rem - 0.5em);display: inline-block; text-align:right;font-size:90%">[5]</span>&#8220;The OpenConfig Project.&#8221; <a href="http://openconfig.net" class="bib-url texturl monospace">http://&#8203;openconfig.&#8203;net</a>.&nbsp;<a href="http://www.bing.com/search?q=the%20OpenConfig%20project%20n.d.%2C%20" class="bibsearch">&#128270;</a></div></div></div><span data-line=""></span></div>
+<svg id='math-svg-paths' style='display:none' version='1.1' viewBox='0 0 0 0' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+<defs>
+<path d='M1.863 -2.301C2.152 -2.301 2.889 -2.321 3.387 -2.531C4.085 -2.829 4.134 -3.417 4.134 -3.557C4.134 -3.995 3.756 -4.403 3.068 -4.403C1.963 -4.403 0.458 -3.437 0.458 -1.694C0.458 -0.677 1.046 0.11 2.022 0.11C3.447 0.11 4.284 -0.946 4.284 -1.066C4.284 -1.126 4.224 -1.196 4.164 -1.196C4.115 -1.196 4.095 -1.176 4.035 -1.096C3.248 -0.11 2.162 -0.11 2.042 -0.11C1.265 -0.11 1.176 -0.946 1.176 -1.265C1.176 -1.385 1.186 -1.694 1.335 -2.301H1.863ZM1.395 -2.521C1.783 -4.035 2.809 -4.184 3.068 -4.184C3.537 -4.184 3.806 -3.895 3.806 -3.557C3.806 -2.521 2.212 -2.521 1.803 -2.521H1.395Z' id='g1-101'/>
+<path d='M6.416 -1.576C5.537 -0.934 5.419 -0.021 5.419 -0.014C5.419 0.091 5.488 0.091 5.586 0.091C5.712 0.091 5.733 0.091 5.767 -0.028C5.809 -0.202 5.921 -0.649 6.283 -1.032C6.688 -1.458 7.037 -1.562 7.33 -1.653C7.371 -1.667 7.399 -1.709 7.399 -1.743C7.399 -1.813 7.357 -1.827 7.267 -1.855C6.263 -2.176 5.907 -2.887 5.76 -3.501C5.733 -3.585 5.684 -3.585 5.586 -3.585S5.419 -3.585 5.419 -3.48C5.419 -3.466 5.488 -2.999 5.83 -2.518C5.991 -2.28 6.186 -2.085 6.416 -1.918H0.816C0.704 -1.918 0.537 -1.918 0.537 -1.75C0.537 -1.576 0.697 -1.576 0.816 -1.576H6.416Z' id='g0-33'/>
+<path d='M4.031 -1.911C3.661 -2.343 3.55 -2.462 3.285 -2.65C2.859 -2.957 2.413 -3.075 2.029 -3.075C1.165 -3.075 0.537 -2.336 0.537 -1.499C0.537 -0.683 1.137 0.07 2.008 0.07C2.978 0.07 3.654 -0.725 3.905 -1.095C4.275 -0.663 4.387 -0.544 4.652 -0.356C5.077 -0.049 5.523 0.07 5.907 0.07C6.772 0.07 7.399 -0.669 7.399 -1.506C7.399 -2.322 6.8 -3.075 5.928 -3.075C4.958 -3.075 4.282 -2.28 4.031 -1.911ZM4.254 -1.653C4.533 -2.106 5.14 -2.81 5.991 -2.81C6.709 -2.81 7.204 -2.176 7.204 -1.506S6.66 -0.314 6.018 -0.314C5.37 -0.314 4.924 -0.844 4.254 -1.653ZM3.682 -1.353C3.403 -0.9 2.797 -0.195 1.946 -0.195C1.227 -0.195 0.732 -0.83 0.732 -1.499S1.276 -2.692 1.918 -2.692C2.566 -2.692 3.013 -2.162 3.682 -1.353Z' id='g0-49'/>
+<path d='M0.877 -0.588C0.847 -0.438 0.787 -0.209 0.787 -0.159C0.787 0.02 0.927 0.11 1.076 0.11C1.196 0.11 1.375 0.03 1.445 -0.169C1.455 -0.189 1.574 -0.658 1.634 -0.907L1.853 -1.803C1.913 -2.022 1.973 -2.242 2.022 -2.471C2.062 -2.64 2.142 -2.929 2.152 -2.969C2.301 -3.278 2.829 -4.184 3.776 -4.184C4.224 -4.184 4.314 -3.816 4.314 -3.487C4.314 -2.869 3.826 -1.594 3.666 -1.166C3.577 -0.936 3.567 -0.817 3.567 -0.707C3.567 -0.239 3.915 0.11 4.384 0.11C5.32 0.11 5.689 -1.345 5.689 -1.425C5.689 -1.524 5.599 -1.524 5.569 -1.524C5.469 -1.524 5.469 -1.494 5.42 -1.345C5.22 -0.667 4.892 -0.11 4.403 -0.11C4.234 -0.11 4.164 -0.209 4.164 -0.438C4.164 -0.687 4.254 -0.927 4.344 -1.146C4.533 -1.674 4.951 -2.77 4.951 -3.337C4.951 -4.005 4.523 -4.403 3.806 -4.403C2.909 -4.403 2.421 -3.766 2.252 -3.537C2.202 -4.095 1.793 -4.403 1.335 -4.403S0.687 -4.015 0.588 -3.836C0.428 -3.497 0.289 -2.909 0.289 -2.869C0.289 -2.77 0.389 -2.77 0.408 -2.77C0.508 -2.77 0.518 -2.78 0.578 -2.999C0.747 -3.706 0.946 -4.184 1.305 -4.184C1.504 -4.184 1.614 -4.055 1.614 -3.726C1.614 -3.517 1.584 -3.407 1.455 -2.889L0.877 -0.588Z' id='g1-110'/>
+<path d='M0.851 -0.439C0.823 -0.349 0.781 -0.174 0.781 -0.153C0.781 0 0.907 0.07 1.018 0.07C1.144 0.07 1.255 -0.021 1.29 -0.084S1.381 -0.37 1.416 -0.516C1.451 -0.649 1.527 -0.969 1.569 -1.144C1.611 -1.297 1.653 -1.451 1.688 -1.611C1.764 -1.897 1.778 -1.953 1.981 -2.239C2.176 -2.518 2.504 -2.88 3.027 -2.88C3.431 -2.88 3.438 -2.525 3.438 -2.392C3.438 -1.974 3.138 -1.2 3.027 -0.907C2.95 -0.711 2.922 -0.649 2.922 -0.53C2.922 -0.16 3.229 0.07 3.585 0.07C4.282 0.07 4.589 -0.893 4.589 -0.997C4.589 -1.088 4.498 -1.088 4.477 -1.088C4.38 -1.088 4.373 -1.046 4.345 -0.969C4.184 -0.411 3.884 -0.126 3.605 -0.126C3.459 -0.126 3.431 -0.223 3.431 -0.37C3.431 -0.53 3.466 -0.621 3.592 -0.934C3.675 -1.151 3.961 -1.89 3.961 -2.28C3.961 -2.957 3.424 -3.075 3.055 -3.075C2.476 -3.075 2.085 -2.72 1.876 -2.441C1.827 -2.922 1.416 -3.075 1.13 -3.075C0.83 -3.075 0.669 -2.859 0.579 -2.699C0.425 -2.441 0.328 -2.043 0.328 -2.008C0.328 -1.918 0.425 -1.918 0.446 -1.918C0.544 -1.918 0.551 -1.939 0.6 -2.127C0.704 -2.538 0.837 -2.88 1.109 -2.88C1.29 -2.88 1.339 -2.727 1.339 -2.538C1.339 -2.406 1.276 -2.148 1.227 -1.96S1.109 -1.485 1.074 -1.332L0.851 -0.439Z' id='g2-110'/>
+<path d='M4.075 -2.291H6.854C6.994 -2.291 7.183 -2.291 7.183 -2.491S6.994 -2.69 6.854 -2.69H4.075V-5.479C4.075 -5.619 4.075 -5.808 3.875 -5.808S3.676 -5.619 3.676 -5.479V-2.69H0.887C0.747 -2.69 0.558 -2.69 0.558 -2.491S0.747 -2.291 0.887 -2.291H3.676V0.498C3.676 0.638 3.676 0.827 3.875 0.827S4.075 0.638 4.075 0.498V-2.291Z' id='g3-43'/>
+<path d='M2.929 -6.376C2.929 -6.615 2.929 -6.635 2.7 -6.635C2.082 -5.998 1.205 -5.998 0.887 -5.998V-5.689C1.086 -5.689 1.674 -5.689 2.192 -5.948V-0.787C2.192 -0.428 2.162 -0.309 1.265 -0.309H0.946V0C1.295 -0.03 2.162 -0.03 2.56 -0.03S3.826 -0.03 4.174 0V-0.309H3.856C2.959 -0.309 2.929 -0.418 2.929 -0.787V-6.376Z' id='g3-49'/>
+<path d='M6.844 -3.258C6.994 -3.258 7.183 -3.258 7.183 -3.457S6.994 -3.656 6.854 -3.656H0.887C0.747 -3.656 0.558 -3.656 0.558 -3.457S0.747 -3.258 0.897 -3.258H6.844ZM6.854 -1.325C6.994 -1.325 7.183 -1.325 7.183 -1.524S6.994 -1.724 6.844 -1.724H0.897C0.747 -1.724 0.558 -1.724 0.558 -1.524S0.747 -1.325 0.887 -1.325H6.854Z' id='g3-61'/>
+<path d='M1.763 -4.403L0.369 -4.294V-3.985C1.016 -3.985 1.106 -3.925 1.106 -3.437V-0.757C1.106 -0.309 0.996 -0.309 0.329 -0.309V0C0.648 -0.01 1.186 -0.03 1.425 -0.03C1.773 -0.03 2.122 -0.01 2.461 0V-0.309C1.803 -0.309 1.763 -0.359 1.763 -0.747V-4.403ZM1.803 -6.137C1.803 -6.456 1.554 -6.665 1.275 -6.665C0.966 -6.665 0.747 -6.396 0.747 -6.137C0.747 -5.868 0.966 -5.609 1.275 -5.609C1.554 -5.609 1.803 -5.818 1.803 -6.137Z' id='g3-105'/>
+<path d='M1.763 -6.914L0.329 -6.804V-6.496C1.026 -6.496 1.106 -6.426 1.106 -5.938V-0.757C1.106 -0.309 0.996 -0.309 0.329 -0.309V0C0.658 -0.01 1.186 -0.03 1.435 -0.03S2.172 -0.01 2.54 0V-0.309C1.873 -0.309 1.763 -0.309 1.763 -0.757V-6.914Z' id='g3-108'/>
+<path d='M1.096 -3.427V-0.757C1.096 -0.309 0.986 -0.309 0.319 -0.309V0C0.667 -0.01 1.176 -0.03 1.445 -0.03C1.704 -0.03 2.222 -0.01 2.56 0V-0.309C1.893 -0.309 1.783 -0.309 1.783 -0.757V-2.59C1.783 -3.626 2.491 -4.184 3.128 -4.184C3.756 -4.184 3.866 -3.646 3.866 -3.078V-0.757C3.866 -0.309 3.756 -0.309 3.088 -0.309V0C3.437 -0.01 3.945 -0.03 4.214 -0.03C4.473 -0.03 4.991 -0.01 5.33 0V-0.309C4.663 -0.309 4.553 -0.309 4.553 -0.757V-2.59C4.553 -3.626 5.26 -4.184 5.898 -4.184C6.526 -4.184 6.635 -3.646 6.635 -3.078V-0.757C6.635 -0.309 6.526 -0.309 5.858 -0.309V0C6.207 -0.01 6.715 -0.03 6.984 -0.03C7.243 -0.03 7.761 -0.01 8.1 0V-0.309C7.582 -0.309 7.333 -0.309 7.323 -0.608V-2.511C7.323 -3.367 7.323 -3.676 7.014 -4.035C6.874 -4.204 6.545 -4.403 5.968 -4.403C5.131 -4.403 4.692 -3.806 4.523 -3.427C4.384 -4.294 3.646 -4.403 3.198 -4.403C2.471 -4.403 2.002 -3.975 1.724 -3.357V-4.403L0.319 -4.294V-3.985C1.016 -3.985 1.096 -3.915 1.096 -3.427Z' id='g3-109'/>
+<path d='M6.974 23.402C6.974 23.362 6.954 23.342 6.934 23.313C6.565 22.944 5.898 22.276 5.23 21.2C3.626 18.63 2.899 15.392 2.899 11.557C2.899 8.877 3.258 5.42 4.902 2.451C5.689 1.036 6.506 0.219 6.944 -0.219C6.974 -0.249 6.974 -0.269 6.974 -0.299C6.974 -0.399 6.904 -0.399 6.765 -0.399S6.605 -0.399 6.456 -0.249C3.118 2.79 2.072 7.352 2.072 11.547C2.072 15.462 2.969 19.407 5.499 22.386C5.699 22.615 6.077 23.024 6.486 23.382C6.605 23.502 6.625 23.502 6.765 23.502S6.974 23.502 6.974 23.402Z' id='g4-18'/>
+<path d='M5.25 11.557C5.25 7.641 4.354 3.696 1.823 0.717C1.624 0.488 1.245 0.08 0.837 -0.279C0.717 -0.399 0.697 -0.399 0.558 -0.399C0.438 -0.399 0.349 -0.399 0.349 -0.299C0.349 -0.259 0.389 -0.219 0.408 -0.199C0.757 0.159 1.425 0.827 2.092 1.903C3.696 4.473 4.423 7.711 4.423 11.547C4.423 14.227 4.065 17.684 2.421 20.653C1.634 22.067 0.807 22.894 0.389 23.313C0.369 23.342 0.349 23.372 0.349 23.402C0.349 23.502 0.438 23.502 0.558 23.502C0.697 23.502 0.717 23.502 0.867 23.352C4.204 20.314 5.25 15.751 5.25 11.557Z' id='g4-19'/>
+</defs>
+</svg>
+
+</body>
+
+</html>

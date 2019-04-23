@@ -1,0 +1,231 @@
+Title       : gNI: Generalized Network Interfaces
+Subtitle    : API Specification
+Author      : Douglas Comer, Adib Rastegarnia
+Affiliation : Purdue University
+Email       : comer@cs.purdue.edu, arastega@purdue.edu
+Title Note  : &date; (version Beta;)
+Math Dpi    : 299
+Heading Base: 2
+Cite All    : True
+Document Class: [11pt]article
+Pdf Latex: xelatex
+Package: [top=1in, bottom=1.25in, left=1in, right=1in]geometry
+Bib         : reference
+
+Package     : [curve]xypic
+Package*    : tikz
+Package*    : pgfplots
+Package*    : pgfplotstable
+Package*    : pstricks
+Package*    : pst-plot
+
+MathJax Ext : AMScd
+Package     : amscd
+MathJax Ext : mhchem
+Package     : [version=3]mhchem
+
+Tex Header* : \usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing}               
+
+body.madoko {
+  font-family: sans-serif, serif;
+}
+title,titlenote,titlefooter,authors,h1,h2,h3,h4,h5 {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+
+.SampleBlock: padding-left=1em padding-right=1em  
+                border-style=solid border-width=1px 
+.SampleSource: padding-top=1ex  
+.SampleContent: padding-bottom=1ex         
+~Sample     : margin-top=1ex margin-bottom=1ex
+              replace="~ Begin SampleBlock {line-adjust=0 } &nl;\
+                       `````madoko {.SampleSource replace=clear .noescape line-adjust=0}&nl;\
+                       &source;&nl;`````&nl;-------- { width=50% text-align=left }&nl;\
+                       ~ Begin SampleContent { line=534 data-line=534  } &nl;\
+                       &source;&nl;~ End SampleContent&nl;~ End SampleBlock&nl;"
+~Slanted    : font-style=normal
+~Fib        : replace='/^x?$/y/' replace='/xx(x*)/~Fib&nl;x\1&nl;~&nl;~Fib&nl;\1&nl;~/' 
+              notag tight 
+
+@tex .SampleContent : padding-top=1ex 
+
+Title2      : (&Title;,&Title;)
+llb         : &#10214;
+rrb         : &#10215;
+Indigo      : #4B0082
+
+~Pre,~Code  : replace="/==>/\(&rArr;\)/g"
+.cbox       : border-width=1px border-style=solid height=0.9em width=0.9em before="&strut;"
+
+Colorizer   : javascript
+Colorizer   : javascript5
+Colorizer   : ruby
+Colorizer   : madoko
+
+.pre-indented: language=madoko
+
+~MadokoNet  : before="[madoko.net]: " background-color=Gainsboro
+
+Script      : https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js
+
+Copyright   : Copyright 2013, Daan Leijen, Microsoft Corporation.
+License     : This is free software; you can redistribute it and/or modify it under the
+              terms of the Apache License, Version 2.0. A copy of the License can be
+              found in the file "license.txt" at the root of this distribution.
+
+
+[TITLE]
+
+~ Begin Abstract
+
+~ End Abstract
+
+~ TexRaw
+\mdDefineUnicode{10214}{\ensuremath{\llbracket}}
+\mdDefineUnicode{10215}{\ensuremath{\rrbracket}}
+~
+
+# Table of contents { - #toc-header toc=none }
+
+[TOC]
+
+# Introduction { @h1=1 }
+P4Runtime, gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
+Management applications use gNMI for configuration of network devices, P4Runtime to implement control plane applications and services, and gNOI for executing 
+operational commands on network devices.. Although details differ, P4Runtime, gNMI, and gNOI employ the same 
+conceptual abstractions and messaging paradigms when communicating with network devices. 
+ The similarity makes it possible to define a single, unified API that supports all configuration,
+ management, and control plane services that gNMI, P4Runtime, and gNOI provide.
+ The essence of the work consists of a set of generalized network configuration and 
+ control interfaces called Generalized Network Interfaces (gNI) that started with the
+  following design goals:
+
+
+
+# Terms, definitions, and symbols 
+
+* gNMI
+* gNOI:
+* gRPC:
+* P4Runtime:
+
+ 
+
+
+# Classification of gNMI and P4Runtime Services 
+Services provides by gNMI, P4Runtime, and gNOI fall into four major categories:
+
+## Fetch Request Paradigm: 
+In this paradigm a client uses a fetch request 
+to obtain information from a target. For example, we use this paradigm in 
+gNMI and P4Runtime to retrieve a snapshot of data and read one or 
+more P4 entities from the target respectively. We list gNMI and P4Runtime
+ functions that follow this paradigm as follows:
+### gNMI: 
+ - **rpc Capabilities(CapabilityRequest) returns (CapabilityResponse)**: 
+      - *Capabilities* function allows the client to retrieve the set of capabilities that is supported by the target.
+ - **rpc Get(GetRequest) returns (GetResponse)**:
+      -  *Get* function allows to retrieve a snapshot of data from the target.
+
+
+### P4Runtime:
+   - **rpc GetForwardingPipelineConfig(GetForwardingPipelineConfigRequest) returns (GetForwardingPipelineConfigResponse):**
+        -  *GetForwardingPipelineConfig* allows to get the current P4 forwarding-pipeline config.
+   -  **rpc Read(ReadRequest) returns (stream ReadResponse):**
+         -  *Read* allows to read one or more P4 entities from the target.
+
+
+## Store Request Paradigm
+In this paradigm, a client uses a store request to update one 
+or more P4 entities or modify the state of data on the target. We list gNMI and P4Runtime
+ functions that follow store request paradigm as follows:
+### gNMI: 
+   - **rpc Set(SetRequest) returns (SetResponse):**
+    -  *Set* function allows the client to modify the state of data on the target.
+    
+### P4Runtime:
+   - **rpc SetForwardingPipelineConfig(SetForwardingPipelineConfigRequest) returns (SetForwardingPipelineConfigResponse):**
+    -  *SetForwardingPipelineConfig* allows to Set the P4 forwarding-pipeline config.
+   -  **rpc Write(WriteRequest) returns (WriteResponse):**
+     - *Write*  function allows to update one or more P4 entities on the target.
+
+## Streaming
+In this paradigm, a client subscribe to receive a stream of events 
+from the target such as the stream of events between the controller 
+and a switch or values of particular paths within the data tree. We list gNMI, P4Runtime, and gNOI 
+ functions that follow streaming paradigm as follows:
+
+### gNMI:
+   - **rpc Subscribe(stream SubscribeRequest) returns (stream SubscribeResponse):**
+    - *Subscribe* allows a client to request the target to send 
+        it values of particular paths within the data tree.
+
+### P4Runtime:
+   -  **rpc StreamChannel(stream StreamMessageRequest) returns (stream StreamMessageResponse):**
+     -  *StreamChannel* allows the bidirectional stream between the controller and the  switch.
+
+### gNOI:
+We list some of the gNOI functions that have been designed based on grpc service side, client side, bidrectional streaming as follows: 
+
+   -  **rpc Ping(PingRequest) returns (stream PingResponse)**:
+     - *Ping* function executes the ping command on the target and streams back the results. This function 
+    is an example of grpc server side streaming. 
+   -  **rpc SetPackage(stream SetPackageRequest) returns (SetPackageResponse):**
+     -  *SetPackage* places a software package (possibly including bootable images) on the target. 
+      This function is an example of grpc client side streaming. 
+   - ** rpc Rotate(stream RotateCertificateRequest) returns (stream RotateCertificateResponse)**
+    - *Rotate* function replace an existing Certificate on the target. This is an 
+       example of bidirectional streaming. 
+
+
+## Network Management Operations:
+
+
+
+### gNOI: 
+
+
+# An Overview of the gNI Specification
+The *gNI* service provides four categories of functions based on the categories that we explained them above.  
+We define each category of gNI rpc functions as follows: 
+
+## Data Fetch Interaction:
+   - **rpc Fetch(FetchRequest) returns (FetchResponse)**: 
+    -  *Fetch* function allows to read one 
+        or more P4 entities or retrieve a snapshot of data from the target using gNMI.
+
+
+## Data Store Interaction:
+   - **rpc Store(StoreRequest) returns (StoreResponse):**
+    - This functions allows us to update one or more
+       P4 entities or modify the state of data on the target using gNMI.
+
+## Streaming Interaction:
+ - **rpc Stream (stream StreamRequest) returns (stream StreamResponse):**
+  -  This  function can be used to support the following functionalities: 
+     - Stream network events using a bidirectional streaming channel between the controller and the switch. 
+     - Request the target to send it values of particular paths within the data tree. 
+     - Implement gNOI network operations where a client needs to send a stream of the requests to the server and waits to receive a response from a device. 
+     - Implement gNOI network operations where a client needs to send a request to the server and waits to receive a stream of responses from a device. 
+
+
+## Command Interaction:
+  -  **rpc Command (CommandRequest) returns (CommandResponse):**
+    - *Command* function to implement gNOI network operations 
+     that a client needs to send a request to the server and waits to receive a response from a device. 
+
+
+
+# An Overview of the Proposed Architecture
+
+~ Figure { #gNI; caption: "The gNI Architecutre." }
+![gNI]
+~
+[gNI]: images/gNI.png "gNI" { width:auto; max-width:90% }
+
+
+
+
+

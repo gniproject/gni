@@ -1,4 +1,4 @@
-# gNI: Generalized Network Interfaces
+# gNI: Generalized Network Interfaces 
 
 P4Runtime, gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
 Management applications use gNMI for configuration of network devices, P4Runtime to implement control plane applications and services, and gNOI for executing 
@@ -14,3 +14,12 @@ conceptual abstractions and messaging paradigms when communicating with network 
    and control network devices and services.
  - Minimize the number of remote procedure call functions that a network administrator 
   need to know for configuring, managing, and controlling of network devices.
+
+
+# Note: 
+
+This is a work in progress project. 
+
+
+# License 
+gNI is released under the Apache Licesne Version 2.0.

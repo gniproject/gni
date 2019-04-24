@@ -345,7 +345,9 @@ conceptual abstractions and messaging paradigms when communicating with network 
 <div class="tocitem tocitem2" data-toc-target-elem="h2" data-toc-target="sec-gni-protobuf-messages" data-toc-depth="2" data-toc-line="[4.2]{.heading-label}.&#8194;gNI Protobuf Messages" style="toctarget:sec-gni-protobuf-messages"><a href="#sec-gni-protobuf-messages" class="localref"><span class="heading-label">4.2</span>.&#8194;gNI Protobuf Messages</a></div>
 <div class="tocblock tocblock3">
 <div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec---fetchrequest---" data-toc-depth="3" data-toc-line="[4.2.1]{.heading-label}.&#8194;**FetchRequest**:" style="toctarget:sec---fetchrequest---"><a href="#sec---fetchrequest---" class="localref"><span class="heading-label">4.2.1</span>.&#8194;<strong class="strong-star2">FetchRequest</strong>:</a></div>
-<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec---fetchresponse---" data-toc-depth="3" data-toc-line="[4.2.2]{.heading-label}.&#8194;**FetchResponse**:" style="toctarget:sec---fetchresponse---"><a href="#sec---fetchresponse---" class="localref"><span class="heading-label">4.2.2</span>.&#8194;<strong class="strong-star2">FetchResponse</strong>:</a></div></div></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec---fetchresponse---" data-toc-depth="3" data-toc-line="[4.2.2]{.heading-label}.&#8194;**FetchResponse**:" style="toctarget:sec---fetchresponse---"><a href="#sec---fetchresponse---" class="localref"><span class="heading-label">4.2.2</span>.&#8194;<strong class="strong-star2">FetchResponse</strong>:</a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec---storerequest--" data-toc-depth="3" data-toc-line="[4.2.3]{.heading-label}.&#8194;**StoreRequest**" style="toctarget:sec---storerequest--"><a href="#sec---storerequest--" class="localref"><span class="heading-label">4.2.3</span>.&#8194;<strong class="strong-star2">StoreRequest</strong></a></div>
+<div class="tocitem tocitem3" data-toc-target-elem="h3" data-toc-target="sec---storeresponse--" data-toc-depth="3" data-toc-line="[4.2.4]{.heading-label}.&#8194;**StoreResponse**" style="toctarget:sec---storeresponse--"><a href="#sec---storeresponse--" class="localref"><span class="heading-label">4.2.4</span>.&#8194;<strong class="strong-star2">StoreResponse</strong></a></div></div></div>
 <div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-an-overview-of-the-proposed-architecture" data-toc-depth="1" data-toc-line="[5]{.heading-label}.&#8194;An Overview of the Proposed Architecture" style="toctarget:sec-an-overview-of-the-proposed-architecture"><a href="#sec-an-overview-of-the-proposed-architecture" class="localref"><span class="heading-label">5</span>.&#8194;An Overview of the Proposed Architecture</a></div>
 <div class="tocitem tocitem1" data-toc-target-elem="h1" data-toc-target="sec-references" data-toc-depth="1" data-toc-line="References" style="toctarget:sec-references"><a href="#sec-references" class="localref">References</a></div></div></nav><h2 id="sec-introduction" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">1</span>.&#8194;</span>Introduction</h2>
 <p class="p noindent">P4Runtime<span class="citations" style="target-element:bibitem">[<a href="#p4runtimerepo" title="p4lang/p4Runtime repository:P4Runtime Protobuf definition files and specification
@@ -543,18 +545,50 @@ P4 entities or modify the state of data on the target using gNMI.
 that a client needs to send a request to the server and waits to receive a response from a device. 
 </li></ul></li></ul>
 <h3 id="sec-gni-protobuf-messages" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2</span>.&#8194;</span>gNI Protobuf Messages</h3><h4 id="sec---fetchrequest---" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.1</span>.&#8194;</span><strong class="strong-star2">FetchRequest</strong>:</h4>
-<div class="prototext" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
-<div class="prototextblock">
-<pre class="para-block pre-fenced pre-fenced4 language-prototext lang-prototext prototext" style="display:block"><code>
-message FetchRequest {
+<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
+<div class="protoblock">
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code>
+<span style="color:blue">message</span> FetchRequest {
 
-  oneof frequest {
-       gnmi.GetRequest gnmiGetRequest = 1;
-       gnmi.CapabilityRequest gnmiCapabilityRequest = 2;
-       p4.v1.ReadRequest p4ReadRequest = 3;
-       p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest = 4;
-    }   
-}</code></pre></div></div><h4 id="sec---fetchresponse---" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.2</span>.&#8194;</span><strong class="strong-star2">FetchResponse</strong>:</h4><h2 id="sec-an-overview-of-the-proposed-architecture" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">5</span>.&#8194;</span>An Overview of the Proposed Architecture</h2>
+  <span style="color:blue">oneof</span> frequest {
+    gnmi.GetRequest gnmiGetRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
+    gnmi.CapabilityRequest gnmiCapabilityRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
+    p4.v1.ReadRequest p4ReadRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
+    p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
+  }   
+}</code></pre></div></div><h4 id="sec---fetchresponse---" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.2</span>.&#8194;</span><strong class="strong-star2">FetchResponse</strong>:</h4>
+<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
+<div class="protoblock">
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> FetchResponse {
+
+ <span style="color:blue">oneof</span> fresponse {
+   gnmi.GetResponse gnmiGetResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
+   gnmi.CapabilityResponse gnmiCapabilityResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
+   p4.v1.ReadResponse p4ReadResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
+   p4.v1.GetForwardingPipelineConfigResponse p4GetForwardingPipelineConfigResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
+  }
+}</code></pre></div></div><h4 id="sec---storerequest--" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.3</span>.&#8194;</span><strong class="strong-star2">StoreRequest</strong></h4>
+<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
+<div class="protoblock">
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> StoreRequest {
+
+ <span style="color:blue">oneof</span> srequest {
+   gnmi.SetRequest gnmiSetRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
+   p4.v1.WriteRequest p4WriteRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
+   p4.v1.SetForwardingPipelineConfigRequest p4SetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
+ }
+}</code></pre></div></div><h4 id="sec---storeresponse--" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.4</span>.&#8194;</span><strong class="strong-star2">StoreResponse</strong></h4>
+<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
+<div class="protoblock">
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> StoreResponse {
+
+  <span style="color:blue">oneof</span> sresponse {
+    gnmi.SetResponse gnmiSetResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
+    p4.v1.WriteResponse p4WriteResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
+    p4.v1.SetForwardingPipelineConfigResponse p4SetForwardingPipelineConfigResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
+  }
+}
+</code></pre></div></div><h2 id="sec-an-overview-of-the-proposed-architecture" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">5</span>.&#8194;</span>An Overview of the Proposed Architecture</h2>
 <p class="p noindent">As Figure&nbsp;<a href="#gni" title="The gNI Architecutre." class="localref" style="target-element:figure"><span class="figure-label">1</span></a> illustrates, the gNI gateway sits between 
 clients and gNMI, P4Runtime, and gNOI servers. The gNI gateway is responsible to translate gNI functions to appropriate gNMI, P4Runtime, and gNOI functions based on the given request. In other words, gNI gateway acts as a server for the clients and acts as a client for gNMI, P4Runtime, and gNOI servers. 
 </p>

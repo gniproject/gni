@@ -299,7 +299,7 @@
 <div class="titleheader align-center" style="text-align:center;line-adjust:0">
 <div class="title para-block" style="font-size:xx-large;margin-bottom:0.5ex;font-family:sans-serif;font-weight:bold;line-adjust:0">gNI: Generalized Network Interfaces</div>
 <div class="subtitle para-block" style="font-size:x-large;margin-bottom:0.5ex;line-adjust:0">API Specification (WIP)</div>
-<div class="titlenote para-block" style="font-family:sans-serif;font-weight:bold;line-adjust:0">2019-04-23 (version Beta;)</div></div>
+<div class="titlenote para-block" style="font-family:sans-serif;font-weight:bold;line-adjust:0">2019-04-24 (version Beta;)</div></div>
 <div class="authors align-center" style="text-align:center;width:80%;font-family:sans-serif;font-weight:bold;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
 <tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
 <div class="authorname" style="font-size:large;line-adjust:0">Douglas Comer, Adib Rastegarnia</div>
@@ -551,18 +551,7 @@ that a client needs to send a request to the server and waits to receive a respo
 <h3 id="sec-gni-protobuf-messages" class="h2" data-heading-depth="2" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2</span>.&#8194;</span>gNI Protobuf Messages</h3>
 <p class="p noindent">We define the gNI protobuf messages that consist of gNMI, P4Runtime, and gNOI messages as follows:
 </p><h4 id="sec-fetchrequest-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.1</span>.&#8194;</span>FetchRequest:</h4>
-<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
-<div class="protoblock">
-<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> FetchRequest {
-
-  <span style="color:blue">oneof</span> frequest {
-    gnmi.GetRequest gnmiGetRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
-    gnmi.CapabilityRequest gnmiCapabilityRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
-    p4.v1.ReadRequest p4ReadRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
-    p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
-  }   
-}</code></pre></div></div><h4 id="sec-fetchresponse-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.2</span>.&#8194;</span>FetchResponse:</h4>
-<p class="p noindent"><em class="em-star1">FetchRequest</em> consists of one of the following gNMI and P4Runtime request messages. 
+<p class="p noindent"><em class="em-star1">FetchRequest</em> consists of one of the following gNMI and P4Runtime request messages:
 </p>
 <ul class="ul list-dash compact">
 <li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">gNMI GetRequest</strong>: A client sends the gNMI <em class="em-star1">GetRequest</em> to initiate a gNMI <em class="em-star1">Get</em> RPC 
@@ -581,7 +570,33 @@ the requested data.
 
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
 <div class="protoblock">
-<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> FetchResponse {
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> FetchRequest {
+
+  <span style="color:blue">oneof</span> frequest {
+    gnmi.GetRequest gnmiGetRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
+    gnmi.CapabilityRequest gnmiCapabilityRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
+    p4.v1.ReadRequest p4ReadRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
+    p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
+  }   
+}</code></pre></div></div><h4 id="sec-fetchresponse-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.2</span>.&#8194;</span>FetchResponse:</h4>
+<p class="p noindent"><em class="em-star1">FetchResponse</em> consists of one of the following gNMI and P4Runtime request messages:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">gNMI GetResponse</strong>: A gNMI target uses <em class="em-star1">GetResponse</em> message to respond to a <em class="em-star1">GetRequest</em> from a client.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">gNMI CapabilityResponse</strong>:A gNMI target uses CapabilityResponse to report its capabilities to the
+  client within the Capabilities RPC.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">P4ReadResponse</strong>: A P4 target uses ReadResponse to respond to a ReadRequest from a client. 
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">GetForwardingPipelineConfigResponse</strong>: A P4 target uses GetForwardingPipelineConfigResponse to 
+  report its current P4 forwarding-pipeline config.
+</li></ul>
+
+<div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
+<div class="protoblock">
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code>
+<span style="color:blue">message</span> FetchResponse {
 
  <span style="color:blue">oneof</span> fresponse {
    gnmi.GetResponse gnmiGetResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;

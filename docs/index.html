@@ -595,8 +595,7 @@ the requested data.
 
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
 <div class="protoblock">
-<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code>
-<span style="color:blue">message</span> FetchResponse {
+<pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> FetchResponse {
 
  <span style="color:blue">oneof</span> fresponse {
    gnmi.GetResponse gnmiGetResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
@@ -605,6 +604,19 @@ the requested data.
    p4.v1.GetForwardingPipelineConfigResponse p4GetForwardingPipelineConfigResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
   }
 }</code></pre></div></div><h4 id="sec-storerequest" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.3</span>.&#8194;</span>StoreRequest</h4>
+<p class="p noindent"><em class="em-star1">StoreRequest</em> consists of one of the following gNMI and P4Runtime request  messages:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">gNMI SetRequest</strong>: A client sends the gNMI <em class="em-star1">SetRequest</em> to initiate a gNMI <em class="em-star1">Set</em> RPC to 
+ update values in the data tree.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">P4 WriteRequest</strong>: A client sends the P4 <em class="em-star1">WriteRequest</em> to initiate a P4 <em class="em-star1">Write</em> RPC and
+  update one or more P4 entities on the target.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">P4 SetForwardingPipelineConfigRequest</strong>: A client sends the P4 <em class="em-star1">SetForwardingPipelineConfigRequest</em> to 
+  initiate a P4 <em class="em-star1">SetForwardingPipelineConfig</em> RPC and set the P4 forwarding-pipeline config.    
+</li></ul>
+
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
 <div class="protoblock">
 <pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> StoreRequest {
@@ -615,6 +627,19 @@ the requested data.
    p4.v1.SetForwardingPipelineConfigRequest p4SetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
  }
 }</code></pre></div></div><h4 id="sec-storeresponse" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.4</span>.&#8194;</span>StoreResponse</h4>
+<p class="p noindent"><em class="em-star1">StoreResponse</em> consists of one of the following gNMI and P4Runtime response
+messages:
+</p>
+<ul class="ul list-dash compact">
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">gNMI SetResponse</strong>: A gNMI target uses <em class="em-star1">SetResponse</em> to report the result of the modifications to 
+  the data tree that a client specifies by initiating a <em class="em-star1">Set</em> RPC.
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">P4 WriteResponse</strong>: A P4 target uses P4 <em class="em-star1">WriteResponse</em> to respond a P4 <em class="em-star1">WriteRequest</em> from a client.    
+</li>
+<li class="li ul-li list-dash-li compact-li"><strong class="strong-star2">P4 SetForwardingPipelineConfigResponse</strong>: A P4 target uses P4 <em class="em-star1">SetForwardingPipelineConfigResponse</em> 
+  to response a P4 <em class="em-star1">SetForwardingPipelineConfigRequest</em> from a client. 
+</li></ul>
+
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
 <div class="protoblock">
 <pre class="para-block pre-fenced pre-fenced4 language-proto lang-proto proto colorized" style="display:block"><code><span style="color:blue">message</span> StoreResponse {

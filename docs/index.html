@@ -299,7 +299,7 @@
 <div class="titleheader align-center" style="text-align:center;line-adjust:0">
 <div class="title para-block" style="font-size:xx-large;margin-bottom:0.5ex;font-family:sans-serif;font-weight:bold;line-adjust:0">gNI: Generalized Network Interfaces</div>
 <div class="subtitle para-block" style="font-size:x-large;margin-bottom:0.5ex;line-adjust:0">API Specification (WIP)</div>
-<div class="titlenote para-block" style="font-family:sans-serif;font-weight:bold;line-adjust:0">2019-04-24 (version Beta;)</div></div>
+<div class="titlenote para-block" style="font-family:sans-serif;font-weight:bold;line-adjust:0">2019-05-01 (version Beta;)</div></div>
 <div class="authors align-center" style="text-align:center;width:80%;font-family:sans-serif;font-weight:bold;line-adjust:0"><table class="authorrow columns block" style="margin-top:2ex;width:100%;line-adjust:0">
 <tbody><tr><td class="author column" style="text-align:center;line-adjust:0">
 <div class="authorname" style="font-size:large;line-adjust:0">Douglas Comer, Adib Rastegarnia</div>
@@ -578,6 +578,7 @@ the requested data.
     p4.v1.ReadRequest p4ReadRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
     p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
   }   
+  <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }</code></pre></div></div><h4 id="sec-fetchresponse-" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.2</span>.&#8194;</span>FetchResponse:</h4>
 <p class="p noindent"><em class="em-star1">FetchResponse</em> consists of one of the following gNMI and P4Runtime request messages:
 </p>
@@ -603,6 +604,7 @@ the requested data.
    p4.v1.ReadResponse p4ReadResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
    p4.v1.GetForwardingPipelineConfigResponse p4GetForwardingPipelineConfigResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">4</span>;
   }
+  <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }</code></pre></div></div><h4 id="sec-storerequest" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.3</span>.&#8194;</span>StoreRequest</h4>
 <p class="p noindent"><em class="em-star1">StoreRequest</em> consists of one of the following gNMI and P4Runtime request  messages:
 </p>
@@ -626,6 +628,7 @@ the requested data.
    p4.v1.WriteRequest p4WriteRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
    p4.v1.SetForwardingPipelineConfigRequest p4SetForwardingPipelineConfigRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
  }
+ <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }</code></pre></div></div><h4 id="sec-storeresponse" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.4</span>.&#8194;</span>StoreResponse</h4>
 <p class="p noindent"><em class="em-star1">StoreResponse</em> consists of one of the following gNMI and P4Runtime response
 messages:
@@ -649,6 +652,7 @@ messages:
    p4.v1.WriteResponse p4WriteResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
    p4.v1.SetForwardingPipelineConfigResponse p4SetForwardingPipelineConfigResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">3</span>;
   }
+  <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }
 </code></pre></div></div><h4 id="sec-streamrequest" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.5</span>.&#8194;</span>StreamRequest</h4>
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
@@ -658,6 +662,7 @@ messages:
    gnmi.SubscribeRequest gnmiSubRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
    p4.v1.StreamMessageRequest p4StreamMessageRequest <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
   }
+  <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }</code></pre></div></div><h4 id="sec-streamresponse" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.6</span>.&#8194;</span>StreamResponse</h4>
 <div class="proto" style="border:solid;margin-top:6pt;margin-bottom:6pt;padding:6pt;background-color:#e6ffff;border-width:0.5pt">
 <div class="protoblock">
@@ -666,6 +671,7 @@ messages:
     gnmi.SubscribeResponse gnmiSubResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">1</span>;
     p4.v1.StreamMessageResponse p4StreamMessageResponse <span style="color:blue">=</span> <span class="constant" style="color:purple">2</span>;
   }
+  <span style="color:blue">repeated</span> <span style="color:teal">bytes</span> metadata <span style="color:blue">=</span> <span class="constant" style="color:purple">5</span>;
 }</code></pre></div></div><h4 id="sec-commandrequest" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.7</span>.&#8194;</span>CommandRequest</h4><h4 id="sec-commandresponse" class="h3" data-heading-depth="3" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">4.2.8</span>.&#8194;</span>CommandResponse</h4><h2 id="sec-an-overview-of-the-proposed-architecture" class="h1" data-heading-depth="1" style="display:block;font-family:sans-serif;font-weight:bold"><span class="heading-before"><span class="heading-label">5</span>.&#8194;</span>An Overview of the Proposed Architecture</h2>
 <p class="p noindent">As Figure&nbsp;<a href="#gni" title="The gNI Architecutre." class="localref" style="target-element:figure"><span class="figure-label">1</span></a> illustrates, the gNI gateway sits between 
 clients and gNMI, P4Runtime, and gNOI servers. The gNI gateway is responsible to

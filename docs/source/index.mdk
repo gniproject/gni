@@ -1,5 +1,5 @@
 Title       : gNI: Generalized Network Interfaces
-Subtitle    : API Specification
+Subtitle    : API Specification (WIP)
 Author      : Douglas Comer, Adib Rastegarnia
 Affiliation : Purdue University
 Email       : comer@cs.purdue.edu, arastega@purdue.edu
@@ -11,6 +11,8 @@ Document Class: [11pt]article
 Pdf Latex: xelatex
 Package: [top=1in, bottom=1.25in, left=1in, right=1in]geometry
 Bib         : reference
+Bibliography: references.bib
+Csl Style : madoko-numeric
 
 Package     : [curve]xypic
 Package*    : tikz
@@ -18,6 +20,7 @@ Package*    : pgfplots
 Package*    : pgfplotstable
 Package*    : pstricks
 Package*    : pst-plot
+
 
 MathJax Ext : AMScd
 Package     : amscd
@@ -63,6 +66,8 @@ Colorizer   : javascript
 Colorizer   : javascript5
 Colorizer   : ruby
 Colorizer   : madoko
+Colorizer: proto
+Colorizer: prototext
 
 .pre-indented: language=madoko
 
@@ -70,16 +75,79 @@ Colorizer   : madoko
 
 Script      : https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js
 
-Copyright   : Copyright 2013, Daan Leijen, Microsoft Corporation.
+Copyright   : Copyright 2019, Adib Rastegarnia, Douglas Comer.
 License     : This is free software; you can redistribute it and/or modify it under the
               terms of the Apache License, Version 2.0. A copy of the License can be
               found in the file "license.txt" at the root of this distribution.
+
+@if html {
+proto {
+  replace: "~ Begin Protoblock&nl;\
+                 ````proto&nl;&source;&nl;````&nl;\
+                 ~ End Protoblock";
+  border: solid;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+  padding: 6pt;
+  background-color: #e6ffff;
+  border-width: 0.5pt;
+}
+}
+
+@if tex {
+proto {
+  replace: "~ Begin Protoblock&nl;\
+                 ````proto&nl;&source;&nl;````&nl;\
+                 ~ End Protoblock";
+  breakable: true;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+  padding: 6pt;
+  background-color: #e6ffff;
+  border: solid;
+  border-width: 0.5pt;
+}
+}
+
+@if html {
+prototext {
+  replace: "~ Begin Prototextblock&nl;\
+                 ````prototext&nl;&source;&nl;````&nl;\
+                 ~ End Prototextblock";
+  border: solid;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+  padding: 6pt;
+  background-color: #e6ffff;
+  border-width: 0.5pt;
+}
+}
+
+@if tex {
+prototext {
+  replace: "~ Begin Prototextblock&nl;\
+                 ````prototext&nl;&source;&nl;````&nl;\
+                 ~ End Prototextblock";
+  breakable: true;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+  padding: 6pt;
+  background-color: #e6ffff;
+  border: solid;
+  border-width: 0.5pt;
+}
+}
 
 
 [TITLE]
 
 ~ Begin Abstract
-
+P4Runtime, gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
+Management applications use gNMI for configuration of network devices, P4Runtime to implement control plane applications and services, and gNOI for executing 
+operational commands on network devices. Although details differ, P4Runtime, gNMI, and gNOI employ the same 
+conceptual abstractions and messaging paradigms when communicating with network devices. 
+ The similarity makes it possible to define a single, unified API that supports all configuration,
+ management, and control plane services that gNMI, P4Runtime, and gNOI provide. 
 ~ End Abstract
 
 ~ TexRaw
@@ -92,9 +160,9 @@ License     : This is free software; you can redistribute it and/or modify it un
 [TOC]
 
 # Introduction { @h1=1 }
-P4Runtime, gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
+P4Runtime[@P4RuntimeRepo], gNMI, and gNOI each provide an API for configuration and control of network devices and all of them use gRPC as an underlying communication mechanism. 
 Management applications use gNMI for configuration of network devices, P4Runtime to implement control plane applications and services, and gNOI for executing 
-operational commands on network devices.. Although details differ, P4Runtime, gNMI, and gNOI employ the same 
+operational commands on network devices. Although details differ, P4Runtime, gNMI, and gNOI employ the same 
 conceptual abstractions and messaging paradigms when communicating with network devices. 
  The similarity makes it possible to define a single, unified API that supports all configuration,
  management, and control plane services that gNMI, P4Runtime, and gNOI provide.
@@ -102,35 +170,47 @@ conceptual abstractions and messaging paradigms when communicating with network 
  control interfaces called Generalized Network Interfaces (gNI) that started with the
   following design goals:
 
+- Provide a set of unified Northbound (NB) interfaces that can be used to configure, manage,
+   and control network devices and services.
+- Minimize the number of remote procedure call functions that a network administrator 
+  need to know for configuring, managing, and controlling of network devices.
+- A Unified API allows us to design and implement a unified intent-based API on top of that for configuring,
+ managing, and controlling of network devices.
+
 
 
 # Terms, definitions, and symbols 
 
-* gNMI
-* gNOI:
-* gRPC:
-* P4Runtime:
-
- 
-
+* gNMI: gNMI is a gRPC network management interface that is  developed by Google. gNMI provides
+ the abstractions that we can use to install, manipulate, and remove the 
+ configuration of network devices, and also to view operational data.
+* gNOI: gNOI is a gRPC network operation interface that provides the abstractions that we can use to execute 
+   operational commands on network devices.
+* gRPC: gRPC is a modern, open source remote procedure call (RPC) framework that can run anywhere. 
+ It enables client and server applications [@gRPC]. 
+ to communicate transparently, and makes it easier to build connected systems.
+* P4Runtime: P4 Runtime is a silicon-independent and protocol-independent API that can be autogenerated
+ from an unambiguous definition of a packet processing pipeline in P4 [@P4RuntimeRepo]. 
+* Protobuf: Protocol Buffers (Protobuf) are language- and platform-neutral mechanisms for
+   serializing structured data[@Proto]. 
 
 # Classification of gNMI and P4Runtime Services 
 Services provides by gNMI, P4Runtime, and gNOI fall into four major categories:
 
-## Fetch Request Paradigm: 
+## Fetch Request Paradigm 
 In this paradigm a client uses a fetch request 
 to obtain information from a target. For example, we use this paradigm in 
 gNMI and P4Runtime to retrieve a snapshot of data and read one or 
 more P4 entities from the target respectively. We list gNMI and P4Runtime
  functions that follow this paradigm as follows:
-### gNMI: 
+### gNMI
  - **rpc Capabilities(CapabilityRequest) returns (CapabilityResponse)**: 
       - *Capabilities* function allows the client to retrieve the set of capabilities that is supported by the target.
  - **rpc Get(GetRequest) returns (GetResponse)**:
       -  *Get* function allows to retrieve a snapshot of data from the target.
 
 
-### P4Runtime:
+### P4Runtime
    - **rpc GetForwardingPipelineConfig(GetForwardingPipelineConfigRequest) returns (GetForwardingPipelineConfigResponse):**
         -  *GetForwardingPipelineConfig* allows to get the current P4 forwarding-pipeline config.
    -  **rpc Read(ReadRequest) returns (stream ReadResponse):**
@@ -141,11 +221,11 @@ more P4 entities from the target respectively. We list gNMI and P4Runtime
 In this paradigm, a client uses a store request to update one 
 or more P4 entities or modify the state of data on the target. We list gNMI and P4Runtime
  functions that follow store request paradigm as follows:
-### gNMI: 
+### gNMI
    - **rpc Set(SetRequest) returns (SetResponse):**
     -  *Set* function allows the client to modify the state of data on the target.
     
-### P4Runtime:
+### P4Runtime
    - **rpc SetForwardingPipelineConfig(SetForwardingPipelineConfigRequest) returns (SetForwardingPipelineConfigResponse):**
     -  *SetForwardingPipelineConfig* allows to Set the P4 forwarding-pipeline config.
    -  **rpc Write(WriteRequest) returns (WriteResponse):**
@@ -157,17 +237,17 @@ from the target such as the stream of events between the controller
 and a switch or values of particular paths within the data tree. We list gNMI, P4Runtime, and gNOI 
  functions that follow streaming paradigm as follows:
 
-### gNMI:
+### gNMI
    - **rpc Subscribe(stream SubscribeRequest) returns (stream SubscribeResponse):**
     - *Subscribe* allows a client to request the target to send 
         it values of particular paths within the data tree.
 
-### P4Runtime:
+### P4Runtime
    -  **rpc StreamChannel(stream StreamMessageRequest) returns (stream StreamMessageResponse):**
      -  *StreamChannel* allows the bidirectional stream between the controller and the  switch.
 
-### gNOI:
-We list some of the gNOI functions that have been designed based on grpc service side, client side, bidrectional streaming as follows: 
+### gNOI
+We list some of the gNOI functions that have been designed based on grpc service side, client side, bidirectional streaming as follows: 
 
    -  **rpc Ping(PingRequest) returns (stream PingResponse)**:
      - *Ping* function executes the ping command on the target and streams back the results. This function 
@@ -181,28 +261,34 @@ We list some of the gNOI functions that have been designed based on grpc service
 
 
 ## Network Management Operations:
+### gNOI
+We list some of the gNOI functions that have been designed based on unary RPCs where 
+the client sends a single request and gets back a single response as follows: 
 
-
-
-### gNOI: 
+   - **rpc Time(TimeRequest) returns (TimeResponse)**
+     - *Time* function returns the current time on the target.
+   - **rpc Reboot(RebootRequest) returns (RebootResponse)** 
+    - *Reboot* function causes the target to reboot.
 
 
 # An Overview of the gNI Specification
 The *gNI* service provides four categories of functions based on the categories that we explained them above.  
 We define each category of gNI rpc functions as follows: 
 
-## Data Fetch Interaction:
+## gNI Service RPC functions
+
+### Data Fetch Interaction:
    - **rpc Fetch(FetchRequest) returns (FetchResponse)**: 
     -  *Fetch* function allows to read one 
         or more P4 entities or retrieve a snapshot of data from the target using gNMI.
 
 
-## Data Store Interaction:
+### Data Store Interaction:
    - **rpc Store(StoreRequest) returns (StoreResponse):**
     - This functions allows us to update one or more
        P4 entities or modify the state of data on the target using gNMI.
 
-## Streaming Interaction:
+### Streaming Interaction:
  - **rpc Stream (stream StreamRequest) returns (stream StreamResponse):**
   -  This  function can be used to support the following functionalities: 
      - Stream network events using a bidirectional streaming channel between the controller and the switch. 
@@ -211,21 +297,150 @@ We define each category of gNI rpc functions as follows:
      - Implement gNOI network operations where a client needs to send a request to the server and waits to receive a stream of responses from a device. 
 
 
-## Command Interaction:
+### Command Interaction:
   -  **rpc Command (CommandRequest) returns (CommandResponse):**
     - *Command* function to implement gNOI network operations 
      that a client needs to send a request to the server and waits to receive a response from a device. 
 
+## gNI Protobuf Messages
+We define the gNI protobuf messages that consist of gNMI, P4Runtime, and gNOI messages as follows:
+### FetchRequest: 
+*FetchRequest* consists of one of the following gNMI and P4Runtime request messages:
 
+  - **gNMI GetRequest**: A client sends the gNMI *GetRequest* to initiate a gNMI *Get* RPC 
+    that specifies the set of data elements for the target and the target returns a snapshot of
+    the requested data.
+  - **gNMI CapabilityRequest**: A client sends the gNMI *CapabilityRequest* to initiate a gNMI *Capabilities* RPC for requesting
+      the target to report its capabilities. 
+  - **P4 ReadRequest**: A client sends the P4 *ReadRquest* to 
+     initiate a P4 RPC *ReadRequest* and read one or more P4 entities from the target.
+  - **P4 GetForwardingPipelineConfigRequest**: A client sends the P4 *GetForwardingPipelineConfigRequest* 
+      to initiate a P4 RPC *GetForwardingPipelineConfig* and get the current P4 forwarding-pipeline config.
+
+~ Begin Proto
+message FetchRequest {
+
+  oneof frequest {
+    gnmi.GetRequest gnmiGetRequest = 1;
+    gnmi.CapabilityRequest gnmiCapabilityRequest = 2;
+    p4.v1.ReadRequest p4ReadRequest = 3;
+    p4.v1.GetForwardingPipelineConfigRequest p4GetForwardingPipelineConfigRequest = 4;
+  }   
+  repeated bytes metadata = 5;
+}
+~ End Proto
+
+### FetchResponse:
+
+*FetchResponse* consists of one of the following gNMI and P4Runtime request messages:
+
+  - **gNMI GetResponse**: A gNMI target uses *GetResponse* message to respond to a *GetRequest* from a client.
+  - **gNMI CapabilityResponse**:A gNMI target uses CapabilityResponse to report its capabilities to the
+      client within the Capabilities RPC.
+  - **P4ReadResponse**: A P4 target uses ReadResponse to respond to a ReadRequest from a client. 
+  - **GetForwardingPipelineConfigResponse**: A P4 target uses GetForwardingPipelineConfigResponse to 
+      report its current P4 forwarding-pipeline config.
+
+~ Begin Proto
+message FetchResponse {
+
+ oneof fresponse {
+   gnmi.GetResponse gnmiGetResponse = 1;
+   gnmi.CapabilityResponse gnmiCapabilityResponse = 2;
+   p4.v1.ReadResponse p4ReadResponse = 3;
+   p4.v1.GetForwardingPipelineConfigResponse p4GetForwardingPipelineConfigResponse = 4;
+  }
+  repeated bytes metadata = 5;
+}
+~ End Proto
+
+### StoreRequest
+
+*StoreRequest* consists of one of the following gNMI and P4Runtime request  messages:
+
+  - **gNMI SetRequest**: A client sends the gNMI *SetRequest* to initiate a gNMI *Set* RPC to 
+     update values in the data tree.
+  - **P4 WriteRequest**: A client sends the P4 *WriteRequest* to initiate a P4 *Write* RPC and
+      update one or more P4 entities on the target.
+  - **P4 SetForwardingPipelineConfigRequest**: A client sends the P4 *SetForwardingPipelineConfigRequest* to 
+      initiate a P4 *SetForwardingPipelineConfig* RPC and set the P4 forwarding-pipeline config.    
+
+~ Begin Proto 
+message StoreRequest {
+
+ oneof srequest {
+   gnmi.SetRequest gnmiSetRequest = 1;
+   p4.v1.WriteRequest p4WriteRequest = 2;
+   p4.v1.SetForwardingPipelineConfigRequest p4SetForwardingPipelineConfigRequest = 3;
+ }
+ repeated bytes metadata = 5;
+}
+~ End Proto
+
+### StoreResponse
+
+*StoreResponse* consists of one of the following gNMI and P4Runtime response
+messages:
+
+   - **gNMI SetResponse**: A gNMI target uses *SetResponse* to report the result of the modifications to 
+       the data tree that a client specifies by initiating a *Set* RPC.
+   -  **P4 WriteResponse**: A P4 target uses P4 *WriteResponse* to respond a P4 *WriteRequest* from a client.    
+   - **P4 SetForwardingPipelineConfigResponse**: A P4 target uses P4 *SetForwardingPipelineConfigResponse* 
+       to response a P4 *SetForwardingPipelineConfigRequest* from a client. 
+
+~ Begin Proto 
+message StoreResponse {
+
+ oneof sresponse {
+   gnmi.SetResponse gnmiSetResponse = 1;
+   p4.v1.WriteResponse p4WriteResponse = 2;
+   p4.v1.SetForwardingPipelineConfigResponse p4SetForwardingPipelineConfigResponse = 3;
+  }
+  repeated bytes metadata = 5;
+}
+
+~ End Proto
+
+### StreamRequest
+~ Begin Proto
+message StreamRequest {
+ oneof srequest {
+   gnmi.SubscribeRequest gnmiSubRequest = 1;
+   p4.v1.StreamMessageRequest p4StreamMessageRequest = 2;
+  }
+  repeated bytes metadata = 5;
+}
+~ End Proto
+
+### StreamResponse
+~ Begin Proto 
+message StreamResponse {
+  oneof sresponse {
+    gnmi.SubscribeResponse gnmiSubResponse = 1;
+    p4.v1.StreamMessageResponse p4StreamMessageResponse = 2;
+  }
+  repeated bytes metadata = 5;
+}
+~ End Proto
+
+### CommandRequest
+
+### CommandResponse
 
 # An Overview of the Proposed Architecture
+As Figure [#gni] illustrates, the gNI gateway sits between 
+clients and gNMI, P4Runtime, and gNOI servers. The gNI gateway is responsible to
+ translate gNI functions to appropriate gNMI, P4Runtime, and gNOI functions
+  based on the given request. In other words, gNI gateway acts as a server 
+  for the clients and acts as a client for gNMI, P4Runtime, and gNOI servers. 
 
 ~ Figure { #gNI; caption: "The gNI Architecutre." }
 ![gNI]
 ~
-[gNI]: images/gNI.png "gNI" { width:auto; max-width:90% }
+[gNI]: images/gNI.png "gNI" { width:auto; max-width:90% ;}
 
 
 
+[BIB]
 
 
